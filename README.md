@@ -1,10 +1,10 @@
-# Sahayak AI: An AI-Based Virtual Assistant for College Services
+# Sahayak-MITS-AI: An AI-Based Virtual Assistant for College Services
 
 A web chatbot that answers student questions about timetables, exam schedules, fees, courses, library, hostel and scholarships. It answers from official college documents uploaded by an administrator, filtered by the student's **branch** and **semester**. If the requested file has not been uploaded, it says so instead of guessing.
 
 Built at the Centre for Computer Science and Technology, Madhav Institute of Technology & Science (MITS), Gwalior, session July-Dec 2026.
 
-**Team:** Aditya Singh Rathore, Yashraj Singh Bundela
+**Team:**Yashraj Singh Bundela, Aditya Singh Rathore
 **Supervisor:** Dr. Shradha Dubey
 
 ---
@@ -75,8 +75,9 @@ SQLite database: courses, exam dates, fees, library, hostel,
 ### Installation
 
 ```bash
-git clone https://github.com/<your-username>/sahayak-ai.git
-cd sahayak-ai
+   git clone https://github.com/aapka-username/Sahayak-MITS-AI.git
+   cd Sahayak-MITS-AI
+
 
 python -m venv .venv
 # Windows PowerShell
