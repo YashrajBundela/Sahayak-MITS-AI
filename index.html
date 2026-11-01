@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#111c36"
+    >
+
+    <meta
+        name="description"
+        content="SAHAYAK AI - College Student Assistant"
+    >
+
+    <title>SAHAYAK AI | College Assistant</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css', v='4') }}"
+    >
+
+    <script
+        src="{{ url_for('static', filename='script.js', v='4') }}"
+        defer
+    ></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='glow.css', v='4') }}">
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">S</div>
+
+            <div>
+                <h1>SAHAYAK AI</h1>
+                <p>MITS College Assistant</p>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <p class="sidebar-label">WORKSPACE</p>
+
+            <button
+                class="nav-button active"
+                id="chatNavButton"
+                type="button"
+            >
+                <span>💬</span>
+                <span>Student Chat</span>
+            </button>
+
+            {% if user_is_admin %}
+
+            <button
+                class="nav-button"
+                id="adminNavButton"
+                type="button"
+            >
+                <span>🛠️</span>
+                <span>Admin Dashboard</span>
+            </button>
+
+            {% endif %}
+        </div>
+
+        <div class="sidebar-bottom">
+
+            <div class="account-card">
+                <div class="account-avatar">
+                    {{ user_name[:1]|upper }}
+                </div>
+
+                <div class="account-details">
+                    <strong>{{ user_name }}</strong>
+
+                    <span>{{ user_email }}</span>
+
+                    {% if user_is_admin %}
+                    <span class="role-badge">Administrator</span>
+                    {% else %}
+                    <span class="role-badge student-badge">
+                        Student
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <a class="logout-button" href="{{ url_for('logout') }}">
+                <span>↪</span>
+                Sign out
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <button
+                type="button"
+                id="menuToggle"
+                class="menu-toggle"
+                aria-label="Toggle navigation"
+            >
+                ☰
+            </button>
+
+            <div>
+                <p class="topbar-eyebrow">YOUR MITS CAMPUS COMPANION</p>
+                <h2 id="pageTitle">Student Assistant</h2>
+            </div>
+
+            <div class="connection-indicator">
+                <span class="status-dot"></span>
+                Local App
+            </div>
+
+        </header>
+
+
+        <!-- STUDENT CHAT VIEW -->
+
+        <section id="chatView" class="view active-view">
+
+            <!-- WELCOME -->
+
+            <div class="welcome-card">
+
+                <div class="welcome-content">
+
+                    <span class="welcome-tag">
+                        YOUR COLLEGE, SIMPLIFIED
+                    </span>
+
+                    <h2>
+                        Hello, {{ user_name }}! 👋
+                    </h2>
+
+                    <p>
+                        Ask questions about your college,
+                        exams, timetable, fees, library,
+                        hostel and uploaded study documents.
+                    </p>
+
+                </div>
+
+                <div class="welcome-art" aria-hidden="true">
+                    🎓
+                </div>
+
+            </div>
+
+
+            <!-- STUDENT PROFILE -->
+
+            <section class="panel preference-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h3>Academic Profile</h3>
+
+                        <p>
+                            Select your branch and semester
+                            to find relevant information.
+                        </p>
+                    </div>
+
+                    <span class="panel-icon">🎯</span>
+
+                </div>
+
+                <form id="preferencesForm">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label for="studentBranch">
+                                Branch
+                            </label>
+
+                            <select
+                                id="studentBranch"
+                                name="branch"
+                                required
+                            >
+                                <option value="">
+                                    Select your branch
+                                </option>
+
+                                <option value="CSE">
+                                    Computer Science (CSE)
+                                </option>
+                                 <option value="CST">
+                                    Computer Science & Technology (CST)
+                                </option>
+                                 <option value="CSBS">
+                                    Computer Science & Business System (CSBS)
+                                </option>
+
+                                <option value="IT">
+                                    Information Technology (IT)
+                                </option>
+
+                                <option value="ECE">
+                                    Electronics (ECE)
+                                </option>
+
+                                <option value="EE">
+                                    Electrical Engineering (EE)
+                                </option>
+
+                                <option value="ME">
+                                    Mechanical Engineering (ME)
+                                </option>
+
+                                <option value="CE">
+                                    Civil Engineering (CE)
+                                </option>
+
+                                <option value="AI_DS">
+                                    Artificial Intelligence & Data Science
+                                </option>
+
+                                <option value="OTHER">
+                                    Other
+                                </option>
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="studentSemester">
+                                Semester
+                            </label>
+
+                            <select
+                                id="studentSemester"
+                                name="semester"
+                                required
+                            >
+                                <option value="">
+                                    Select your semester
+                                </option>
+
+                                <option value="1">Semester 1</option>
+                                <option value="2">Semester 2</option>
+                                <option value="3">Semester 3</option>
+                                <option value="4">Semester 4</option>
+                                <option value="5">Semester 5</option>
+                                <option value="6">Semester 6</option>
+                                <option value="7">Semester 7</option>
+                                <option value="8">Semester 8</option>
+                            </select>
+
+                        </div>
+
+                        <div class="form-action">
+
+                            <button
+                                type="submit"
+                                class="primary-button"
+                                id="savePreferencesButton"
+                            >
+                                Save Profile
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <p
+                        id="preferencesStatus"
+                        class="status-message"
+                        aria-live="polite"
+                    ></p>
+
+                </form>
+
+            </section>
+
+
+            <!-- QUICK QUESTIONS -->
+
+            <section class="quick-section">
+
+                <div class="section-heading">
+
+                    <div>
+                        <h3>Quick Questions</h3>
+
+                        <p>
+                            Choose a topic to start a conversation.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="quick-grid">
+
+                    <button
+                        class="quick-card"
+                        type="button"
+                        data-question="Show my college timetable"
+                    >
+                        <span class="quick-icon purple">📅</span>
+
+                        <span>
+                            <strong>Timetable</strong>
+                            <small>Class schedules</small>
+                        </span>
+
+                        <span class="quick-arrow">→</span>
+                    </button>
+
+
+                    <button
+                        class="quick-card"
+                        type="button"
+                        data-question="Tell me about exam dates"
+                    >
+                        <span class="quick-icon orange">📝</span>
+
+                        <span>
+                            <strong>Examinations</strong>
+                            <small>Exam information</small>
+                        </span>
+
+                        <span class="quick-arrow">→</span>
+                    </button>
+
+
+                    <button
+                        class="quick-card"
+                        type="button"
+                        data-question="Tell me about college fees"
+                    >
+                        <span class="quick-icon green">💳</span>
+
+                        <span>
+                            <strong>College Fees</strong>
+                            <small>Fee information</small>
+                        </span>
+
+                        <span class="quick-arrow">→</span>
+                    </button>
+
+
+                    <button
+                        class="quick-card"
+                        type="button"
+                        data-question="Tell me about scholarships"
+                    >
+                        <span class="quick-icon blue">🎓</span>
+
+                        <span>
+                            <strong>Scholarships</strong>
+                            <small>Eligibility and documents</small>
+                        </span>
+
+                        <span class="quick-arrow">→</span>
+                    </button>
+
+
+                    <button
+                        class="quick-card"
+                        type="button"
+                        data-question="Tell me about library timings"
+                    >
+                        <span class="quick-icon pink">📚</span>
+
+                        <span>
+                            <strong>Library</strong>
+                            <small>Opening hours</small>
+                        </span>
+
+                        <span class="quick-arrow">→</span>
+                    </button>
+
+
+                    <button
+                        class="quick-card"
+                        type="button"
+                        data-question="Tell me about hostel facilities"
+                    >
+                        <span class="quick-icon teal">🏠</span>
+
+                        <span>
+                            <strong>Hostel</strong>
+                            <small>Facilities and details</small>
+                        </span>
+
+                        <span class="quick-arrow">→</span>
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- CHAT PANEL -->
+
+            <section class="panel chat-panel">
+
+                <div class="panel-heading chat-heading">
+
+                    <div class="chat-title-icon">✦</div>
+
+                    <div>
+                        <h3>Chat with SAHAYAK AI</h3>
+
+                        <p>
+                            Ask your college-related question below.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="chatMessages"
+                    class="chat-messages"
+                    aria-live="polite"
+                    aria-label="Chat messages"
+                >
+
+                    <div class="message assistant-message">
+
+                        <div class="message-avatar">
+                            S
+                        </div>
+
+                        <div class="message-content">
+
+                            <div class="message-name">
+                                SAHAYAK AI
+                            </div>
+
+                            <div class="message-bubble">
+                                Hi! I'm your college assistant.
+                                Select your branch and semester,
+                                then ask me a question.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <form id="chatForm" class="chat-form">
+
+                    <div class="chat-input-wrap">
+
+                        <textarea
+                            id="chatInput"
+                            name="message"
+                            rows="1"
+                            maxlength="2000"
+                            placeholder="Ask about exams, fees, timetable..."
+                            aria-label="Your message"
+                            required
+                        ></textarea>
+
+                        <button
+                            type="submit"
+                            id="sendButton"
+                            class="send-button"
+                            aria-label="Send message"
+                            title="Send message"
+                        >
+                            ➤
+                        </button>
+
+                    </div>
+
+                    <div class="chat-footer">
+
+                        <span>
+                            Answers depend on information available
+                            in the college database and documents.
+                        </span>
+
+                        <span id="characterCount">
+                            0 / 2000
+                        </span>
+
+                    </div>
+
+                    <p
+                        id="chatStatus"
+                        class="status-message"
+                        aria-live="polite"
+                    ></p>
+
+                </form>
+
+            </section>
+
+        </section>
+
+
+        <!-- ADMIN VIEW -->
+
+        {% if user_is_admin %}
+
+        <section id="adminView" class="view">
+
+            <div class="admin-welcome">
+
+                <div>
+                    <span class="welcome-tag">
+                        ADMINISTRATION
+                    </span>
+
+                    <h2>Admin Dashboard</h2>
+
+                    <p>
+                        Manage college knowledge documents
+                        and review database statistics.
+                    </p>
+                </div>
+
+                <div class="admin-icon">🛠️</div>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+
+            <section class="stats-grid">
+
+                <div class="stat-card">
+
+                    <span class="stat-label">
+                        Knowledge Documents
+                    </span>
+
+                    <strong id="docCount">—</strong>
+
+                    <span class="stat-description">
+                        Uploaded documents
+                    </span>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-label">
+                        Total Characters
+                    </span>
+
+                    <strong id="charCount">—</strong>
+
+                    <span class="stat-description">
+                        Extracted document text
+                    </span>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-label">
+                        Courses
+                    </span>
+
+                    <strong id="courseCount">—</strong>
+
+                    <span class="stat-description">
+                        Database records
+                    </span>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-label">
+                        Students with Profiles
+                    </span>
+
+                    <strong id="studentCount">—</strong>
+
+                    <span class="stat-description">
+                        Saved academic preferences
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- UPLOAD DOCUMENT -->
+
+            <section class="panel admin-upload-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h3>Upload Knowledge Document</h3>
+
+                        <p>
+                            Add college documents for the chatbot
+                            to search.
+                        </p>
+                    </div>
+
+                    <span class="panel-icon">📤</span>
+
+                </div>
+
+
+                <form
+                    id="uploadForm"
+                    enctype="multipart/form-data"
+                >
+
+                    <div
+                        id="dropZone"
+                        class="drop-zone"
+                    >
+
+                        <div class="upload-icon">
+                            📁
+                        </div>
+
+                        <h4>Choose a document to upload</h4>
+
+                        <p>
+                            Select a file from your computer.
+                        </p>
+
+                        <label
+                            for="knowledgeFile"
+                            class="file-picker-button"
+                        >
+                            Browse Files
+                        </label>
+
+                        <input
+                            type="file"
+                            id="knowledgeFile"
+                            name="file"
+                            accept=".pdf,.txt,.md,.csv,.docx,.xlsx"
+                            required
+                        >
+
+                        <p
+                            id="selectedFile"
+                            class="selected-file"
+                        >
+                            No file selected
+                        </p>
+
+                        <small>
+                            Supported: PDF, TXT, MD, CSV, DOCX, XLSX.
+                            Maximum size: 8 MB.
+                        </small>
+
+                    </div>
+
+
+                    <div class="form-grid upload-options">
+
+                        <div class="form-group">
+
+                            <label for="uploadBranch">
+                                Target Branch
+                            </label>
+
+                            <select
+                                id="uploadBranch"
+                                name="branch"
+                                required
+                            >
+                                <option value="ALL">
+                                    All Branches
+                                </option>
+
+                                <option value="CSE">CSE</option>
+                                <option value="CST">CST</option>
+                                <option value="CSBS">CSBS</option>
+                                <option value="IT">IT</option>
+                                <option value="ECE">ECE</option>
+                                <option value="EE">EE</option>
+                                <option value="ME">ME</option>
+                                <option value="CE">CE</option>
+                                <option value="AI_DS">AI & Data Science</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="uploadSemester">
+                                Target Semester
+                            </label>
+
+                            <select
+                                id="uploadSemester"
+                                name="semester"
+                                required
+                            >
+                                <option value="ALL">
+                                    All Semesters
+                                </option>
+
+                                <option value="1">Semester 1</option>
+                                <option value="2">Semester 2</option>
+                                <option value="3">Semester 3</option>
+                                <option value="4">Semester 4</option>
+                                <option value="5">Semester 5</option>
+                                <option value="6">Semester 6</option>
+                                <option value="7">Semester 7</option>
+                                <option value="8">Semester 8</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="upload-actions">
+
+                        <button
+                            type="submit"
+                            id="uploadButton"
+                            class="primary-button"
+                        >
+                            Upload Document
+                        </button>
+
+                    </div>
+
+
+                    <p
+                        id="uploadStatus"
+                        class="status-message"
+                        aria-live="polite"
+                    ></p>
+
+                </form>
+
+            </section>
+
+
+            <!-- DOCUMENT LIST -->
+
+            <section class="panel document-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h3>Knowledge Library</h3>
+
+                        <p>
+                            Manage documents available to the chatbot.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="refreshDocuments"
+                        class="secondary-button"
+                    >
+                        ↻ Refresh
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="documentList"
+                    class="document-list"
+                >
+
+                    <div class="empty-state">
+                        Loading documents...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- DATABASE STATISTICS -->
+
+            <section class="panel database-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <h3>Database Overview</h3>
+
+                        <p>
+                            Record counts from the local database.
+                        </p>
+                    </div>
+
+                    <span class="panel-icon">📊</span>
+
+                </div>
+
+                <div
+                    id="databaseStats"
+                    class="database-stats"
+                >
+                    Loading statistics...
+                </div>
+
+            </section>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- FOOTER -->
+
+        <footer class="app-footer">
+
+            <span>SAHAYAK AI</span>
+
+            <span>
+                College Assistant · Local Development
+            </span>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<!-- TOAST MESSAGE -->
+
+<div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+></div>
+
+    <script src="{{ url_for('static', filename='glow.js', v='4') }}"></script>
+</body>
+</html
