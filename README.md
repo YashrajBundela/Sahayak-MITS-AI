@@ -75,7 +75,7 @@ SQLite database: courses, exam dates, fees, library, hostel,
 ### Installation
 
 ```bash
-   git clone https://github.com/aapka-username/Sahayak-MITS-AI.git
+      git clone https://github.com/YashrajBundela/Sahayak-MITS-AI.git
    cd Sahayak-MITS-AI
 
 
@@ -117,8 +117,7 @@ python -c "import secrets; print(secrets.token_hex(32))"
 python app.py
 ```
 
-Then open **http://127.0.0.1:5000** and sign in with the college Google account. On Windows you can also double-click `run.bat`.
-
+Then open **http://127.0.0.1:5000** and sign in with the college Google account. 
 Always use `127.0.0.1`, not `localhost`, so the login cookie stays valid.
 
 ---
@@ -153,7 +152,6 @@ seed_services.py     Courses, exam dates, library, hostel, scholarships
 templates/           login.html, index.html
 static/              style.css, script.js, glow.css, glow.js
 requirements.txt     Python packages
-run.bat              One-click start on Windows
 .env.example         Template for secrets
 ```
 
